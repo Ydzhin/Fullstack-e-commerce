@@ -2,7 +2,7 @@
     <div class="loader"></div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 </script>
 
