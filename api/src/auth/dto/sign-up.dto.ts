@@ -13,7 +13,7 @@ export class SignUp {
 
   @IsDefined()
   @IsEmail()
-  @Validate(IsUserAlreadyExist)
+  @Validate(isUserAlreadyExist)
   readonly email: string;
 
   @IsDefined()
