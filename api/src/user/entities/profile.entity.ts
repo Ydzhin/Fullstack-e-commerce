@@ -19,7 +19,7 @@ export class Profile {
   birthay: Date;
 
   @Column()
-  websire: string;
+  website: string;
 
   @Column()
   occupation: string;
