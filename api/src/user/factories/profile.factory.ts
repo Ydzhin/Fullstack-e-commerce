@@ -3,7 +3,7 @@ import { Profile } from '../entities/profile.entity';
 
 export const profileFactory = setSeederFactory(Profile, faker => {
   const profile = new Profile();
-  profile.birthay = faker.date.birthdate();
+  profile.birthday = faker.date.birthdate();
   profile.occupation = faker.person.jobTitle();
   profile.phone = faker.phone.number();
   profile.website = faker.internet.url();

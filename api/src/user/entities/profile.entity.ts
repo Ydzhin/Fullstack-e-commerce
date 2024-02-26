@@ -16,7 +16,7 @@ export class Profile {
   phone: string;
 
   @Column('date')
-  birthay: Date;
+  birthday: Date;
 
   @Column()
   website: string;
