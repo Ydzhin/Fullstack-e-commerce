@@ -19,29 +19,29 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 
-
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-}
-@Post('register')
-@HttpCode(HttpStatus.CREATED)
-@UseInterceptors(TokenInterceptor)
-register(@Body() signUp: SignUp): Promise<User> {
-  return this.authService.register(signUp)
-}
 
-@Post('login')
-@UseGuards(LocalAuthGuard)
-@HttpCode(HttpStatus.OK)
-@UseInterceptors(TokenInterceptor)
-async login(@AuthUser() user: User): Promise<User> {
-  return user
-}
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(TokenInterceptor)
+  register(@Body() signUp: SignUp): Promise<User> {
+    return this.authService.register(signUp);
+  }
 
-@Get('/me')
-@UseGuards(SessionAuthGuard, JWTAuthGuard)
-@me(@AuthUser() user: User): User {
-  return user;
+  @Post('login')
+  @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(TokenInterceptor)
+  async login(@AuthUser() user: User): Promise<User> {
+    return user;
+  }
+
+  @Get('/me')
+  @UseGuards(SessionAuthGuard, JWTAuthGuard)
+  me(@AuthUser() user: User): User {
+    return user;
+  }
 }
