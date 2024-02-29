@@ -9,7 +9,7 @@ const extractJwtFromCookie: JwtFromRequestFunction = request => {
   return request.signedCookies['token']!;
 };
 @Injectable()
-export class JWTStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
