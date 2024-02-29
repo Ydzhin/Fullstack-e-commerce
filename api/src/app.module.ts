@@ -1,27 +1,20 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-/* import { ServeStaticModule } from '@nestjs/serve-static'; */
-import { join } from 'path';
-import { DATABASE_CONFIG } from './database.connection';
+import { TerminusModule } from '@nestjs/terminus';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { TodoModule } from './todo/todo.module';
+import { HealthController } from './health.controller';
+import { dataSourceOptions } from './data-source';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { JwtModule } from '@nestjs/jwt';
-import { authDelay, jwtConstants } from './constant';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(DATABASE_CONFIG),
-    /* ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../', 'client/dist'),
-    }), */
-    TypeOrmModule.forFeature([User]),
-    JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: authDelay },
-    }),
+    TypeOrmModule.forRoot({ ...dataSourceOptions, autoLoadEntities: true }),
+    TerminusModule,
+    UserModule,
+    AuthModule,
+    TodoModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [HealthController],
 })
 export class AppModule {}
