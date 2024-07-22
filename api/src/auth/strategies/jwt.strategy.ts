@@ -1,13 +1,15 @@
-import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, JwtFromRequestFunction, Strategy } from 'passport-jwt';
-import { AuthService } from '../auth.service';
-import { JwtPayload } from '../interfaces/jwt-payload.interface';
-import { User } from 'src/user/entities/user.entity';
 import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy, ExtractJwt, JwtFromRequestFunction } from 'passport-jwt';
+
+import { AuthService } from '../auth.service';
+import { User } from '../../user/entities/user.entity';
+import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
 const extractJwtFromCookie: JwtFromRequestFunction = request => {
-  return request.signedCookies['token']!;
+  return request.signedCookies['token']!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 };
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly authService: AuthService) {
@@ -21,6 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       passReqToCallback: false,
     });
   }
+
   validate(payload: JwtPayload): Promise<User> {
     return this.authService.verifyPayload(payload);
   }

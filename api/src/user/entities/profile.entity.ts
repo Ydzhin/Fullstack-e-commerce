@@ -1,10 +1,11 @@
 import {
-  Column,
   Entity,
-  JoinColumn,
-  OneToOne,
   PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
+
 import { User } from './user.entity';
 
 @Entity()

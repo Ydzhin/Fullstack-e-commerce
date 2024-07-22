@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { TodoModule } from './todo/todo.module';
-import { HealthController } from './health.controller';
-import { dataSourceOptions } from './data-source';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { AuthModule } from './auth/auth.module';
+import { dataSourceOptions } from './data-source';
+import { HealthController } from './health.controller';
+import { TodoModule } from './todo/todo.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [

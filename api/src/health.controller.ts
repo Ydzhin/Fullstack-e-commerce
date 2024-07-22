@@ -14,6 +14,7 @@ export class HealthController {
     private orm: TypeOrmHealthIndicator,
     private memory: MemoryHealthIndicator,
   ) {}
+
   @Get()
   @HealthCheck()
   check(): Promise<HealthCheckResult> {

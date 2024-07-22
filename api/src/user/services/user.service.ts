@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { FindOneOptions, Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, FindOneOptions } from 'typeorm';
+
+import { User } from '../entities/user.entity';
 import { UserUpdate } from '../dto/user-update.dto';
 
 @Injectable()
@@ -10,10 +11,13 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
+
   async create(data: Partial<User>): Promise<User> {
     const user = this.userRepository.create(data);
+
     return this.userRepository.save(user);
   }
+
   async findOne(where: FindOneOptions<User>): Promise<User> {
     const user = await this.userRepository.findOne(where);
 
@@ -22,14 +26,19 @@ export class UserService {
         `There isn't any user with identifier: ${where}`,
       );
     }
+
     return user;
   }
+
   async update(id: number, updates: UserUpdate): Promise<User> {
-    const user = await this.userRepository.findOne({ id });
+    const user = await this.userRepository.findOneBy({ id });
+
     if (!user) {
       throw new NotFoundException(`There isn't any user with id: ${id}`);
     }
+
     this.userRepository.merge(user, updates);
+
     return this.userRepository.save(user);
   }
 }

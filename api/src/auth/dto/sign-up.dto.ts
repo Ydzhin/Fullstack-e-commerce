@@ -5,7 +5,8 @@ import {
   MinLength,
   Validate,
 } from 'class-validator';
-import { isUserAlreadyExist } from '../../user/validators/is-user-already-exist.validator';
+import { IsUserAlreadyExist } from '../../user/validators/is-user-already-exist.validator';
+
 export class SignUp {
   @IsDefined()
   @IsNotEmpty()
@@ -13,7 +14,7 @@ export class SignUp {
 
   @IsDefined()
   @IsEmail()
-  @Validate(isUserAlreadyExist)
+  @Validate(IsUserAlreadyExist)
   readonly email: string;
 
   @IsDefined()

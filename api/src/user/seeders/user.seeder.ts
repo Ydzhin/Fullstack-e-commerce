@@ -1,6 +1,6 @@
 import { type DataSource } from 'typeorm';
 import { Seeder, type SeederFactoryManager } from 'typeorm-extension';
-import { userFactory } from '../factories/user.factory';
+
 import { User } from '../entities/user.entity';
 
 export class UserSeeder implements Seeder {
@@ -9,6 +9,7 @@ export class UserSeeder implements Seeder {
     factoryManager: SeederFactoryManager,
   ): Promise<void> {
     const userFactory = factoryManager.get(User);
+
     await userFactory.save({
       id: 1,
       name: 'John Doe',

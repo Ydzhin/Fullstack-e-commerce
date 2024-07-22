@@ -9,6 +9,7 @@ import {
   Put,
   Body,
 } from '@nestjs/common';
+
 import { UserService } from '../services/user.service';
 import { UserUpdate } from '../dto/user-update.dto';
 import { JWTAuthGuard } from '../../auth/guards/jwt-auth.guard';
@@ -20,10 +21,12 @@ import { User } from '../entities/user.entity';
 @UseInterceptors(ClassSerializerInterceptor)
 export class ProfileController {
   constructor(private readonly userService: UserService) {}
+
   @Get(':id')
   get(@Param('id', new ParseIntPipe()) id: number): Promise<User> {
     return this.userService.findOne({ where: { id } });
   }
+
   @Put(':id')
   update(
     @Param('id', new ParseIntPipe()) id: number,
