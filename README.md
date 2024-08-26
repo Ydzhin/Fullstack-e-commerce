@@ -1,45 +1,25 @@
+# Jwt authorization with vue.js
 
-# RED BRICK E-COMMERCE APP
+* STACK:
+1. jwt
+2. vue.js
+3. nest.js (in past express.js)
+4. postgresql
+5. after maybe docker
 
-The PURPOSE of this project is to train and discover NestJS, then explore all the new features of vuejs version 3 such as the COMPOSITION API, suspense, teleport and to use the pinia store.
+# Start project with dependency injection
 
-This is an e-commerce site whose model was taken on DRIBBLE :) :)
-
-
-## Installation
-
-Install my project in two parts. For client side : 
-
+* FRONTEND:
 ```bash
-    npm i
+cd ./frontend
+npm install
+npm run dev
+open link on terminal
 ```
+* BACKEND:
 
-For api side, you need to type following commands after installing pgadminb : 
-
-```bash
-    sudo apt install pgadmin4
-    sudo -u postgres psql
-    CREATE DATABASE redbrick;
-    sudo -u postgres createuser postgres;
-    alter user postgres with encrypted password postgres;
-    GRANT ALL PRIVILEGES ON DATABASE redbrick TO postgres;
-    npm i
-```
-    
-## Tech Stack
-
-**Client:** Vue3
-
-**Server:** NestJS
-
-**Database:** Postgres SQL
-
-
-
-## Run Locally
-
-Start the server front end and backend command
-
-```bash
-  npm run dev
+```back
+cd ../backend
+npm install
+npm run start:dev
 ```
