@@ -1,2 +1,29 @@
 {
+    "i18n-ally.localesPaths": [
+        "src/locales"
+    ],
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+    "notebook.defaultFormatter": "dbaeumer.vscode-eslint",
+    "eslint.format.enable": true,
+    
+    "eslint.validate": [
+    "javascript",
+    "vue",
+    "vue-html"
+  ],
+   "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+    "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "files.eol": "\n"
+  },
+  "eslint.workingDirectories": [
+    
+  ],
+  "i18n-ally.keystyle": "nested",
 }
