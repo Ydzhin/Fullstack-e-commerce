@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import axios from "axios";
-import { api } from "../../../../Constants";
-import { onMounted, ref, type Ref } from "vue";
-import Heart from "@/components/icons/Heart.vue";
 import dayjs from "dayjs";
 import { decode } from "jwt-js-decode";
+import { onMounted, ref, type Ref } from "vue";
+
+import Heart from "@/components/icons/Heart.vue";
+
+import { api } from "../../../Constants";
 
 interface userData {
   _id?: string;
   password?: string;
   login?: string;
 }
-
 
 interface likes {
   _id: String;
@@ -32,13 +33,13 @@ const props = defineProps({
   createdAt: {
     type: Date,
     required: true,
-    default: ""
+    default: "",
   },
   _id: {
     type: String,
     required: true,
-    default: ""
-  }
+    default: "",
+  },
 });
 
 const userData: Ref<userData> = ref({});
@@ -53,7 +54,7 @@ let jwt;
 let id: string = "";
 
 if (token) {
-  jwt = decode(token);;
+  jwt = decode(token);
   id = jwt.payload.id;
 }
 
@@ -61,7 +62,7 @@ async function getUserDataByPost() {
   await axios.get(`${api}/get_user_data_by_post`, {
     params: {
       author_id: props.author_id,
-    }
+    },
   }).then((resp) => {
     userPostData.value = resp.data;
   }).catch((err) => {
@@ -82,10 +83,9 @@ async function getUserData() {
 async function getLikesByPost() {
   await axios.get(`${api}/get_likes_by_post`, {
     params: {
-      post_id: props._id
-    }
+      post_id: props._id,
+    },
   }).then((resp) => {
-
     likesPost.value = resp.data;
     for (let i = 0; i < likesPost.value.length; i++) {
       if (likesPost.value[i].user_id == userData.value._id) {
@@ -97,21 +97,18 @@ async function getLikesByPost() {
   }).catch((err) => {
     console.log(err);
   });
-
 }
 
 async function like() {
-
   if (token) {
     if (!wrongLike.value) {
       await axios.post(`${api}/create_like`, {
         post_id: props._id,
-        user_id: userData.value._id
+        user_id: userData.value._id,
       });
-    }
-    else {
+    } else {
       await axios.post(`${api}/delete_like`, {
-        post_id: props._id
+        post_id: props._id,
       }).then(() => {
         wrongLike.value = false;
       });
@@ -130,7 +127,7 @@ onMounted(() => {
 });
 
 function getTimePost(time: Date) {
-  return dayjs(time).format('DD.MM.YYYY HH:mm');
+  return dayjs(time).format("DD.MM.YYYY HH:mm");
 }
 
 </script>
@@ -140,28 +137,46 @@ function getTimePost(time: Date) {
     <div class="post">
       <div class="row">
         <div class="col-1">
-          <img src="https://i.pinimg.com/736x/17/fc/60/17fc600d9bfd9f4aff6bdd718e82df98.jpg" alt="avatar"
-            class="avatar">
+          <img
+            src="https://i.pinimg.com/736x/17/fc/60/17fc600d9bfd9f4aff6bdd718e82df98.jpg"
+            alt="avatar"
+            class="avatar"
+          >
         </div>
         <div class="col-xl-8 col-8 px-5 main-data">
-          <p class="login">{{ userPostData.login }}</p>
-          <p class="date">{{ getTimePost(props.createdAt) }}</p>
+          <p class="login">
+            {{ userPostData.login }}
+          </p>
+          <p class="date">
+            {{ getTimePost(props.createdAt) }}
+          </p>
         </div>
       </div>
-      <p class="text mt-3">{{ props.text }}</p>
+      <p class="text mt-3">
+        {{ props.text }}
+      </p>
       <div class="likes pt-3">
         <transition name="fade">
-          <Heart @click="like" :is-wrong="wrongLike" />
+          <Heart
+            :is-wrong="wrongLike"
+            @click="like"
+          />
         </transition>
         <transition name="fade">
-          <span class="count-likes px-2" :class="{
-            red: wrongLike
-          }">
+          <span
+            class="count-likes px-2"
+            :class="{
+              red: wrongLike,
+            }"
+          >
             {{ likesPost.length }}
           </span>
         </transition>
         <transition name="fade">
-          <div v-if="errorToken" class="error-like-token mt-3">
+          <div
+            v-if="errorToken"
+            class="error-like-token mt-3"
+          >
             Чтобы оценивать записи,
             <RouterLink to="/login">
               Авторизируйтесь

@@ -1,114 +1,126 @@
-
 <template>
   <div class="wrapper">
     <div class="container-form">
-      <form class="form d-flex justify-content-center align-items-center" @submit="auth">
-          <div class="col-xl-8 col-12">
-            <div class="text-center">
-              <p class="main-title">Авторизация</p>
+      <form
+        class="form d-flex justify-content-center align-items-center"
+        @submit.prevent="auth"
+      >
+        <div class="col-xl-8 col-12">
+          <div class="text-center">
+            <p class="main-title">
+              Авторизация
+            </p>
+          </div>
+          <div class="row mt-4">
+            <div class="col-12">
+              <label>
+                <p class="label">Логин <span class="title">*</span></p>
+                <input
+                  v-model="login"
+                  type="text"
+                  placeholder="Введите логин"
+                >
+              </label>
             </div>
-            <div class="row mt-4">
-              <div class="col-12">
-                <label>
-                  <p class="label">Логин <span class="title">*</span></p>
-                  <input type="text" placeholder="Введите логин" v-model="login">
-                </label>
-              </div>
-              <div class="col-12 mt-3">
-                <label>
-                  <p class="label">Пароль <span class="title">*</span></p>
-                  <input type="text" placeholder="Введите пароль" v-model="password">
-                </label>
-              </div>
-              <RouterLink to="/profile">
-                <p class="mt-3">
-                  <span class="go-profile">Перейти к профилю</span>
-                </p>
-              </RouterLink>
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-12">
-                    <transition name="fade">
-                      <div v-if="isSuccess">
-                        <Alert text="Успешная авторизация!" type="success" />
-                      </div>
-                    </transition>
-                    <transition name="fade">
-                      <div v-if="isError">
-                        <Alert text="Неизвестная ошибка" type="danger" />
-                      </div>
-                    </transition>
-                  </div>
-                  <div class="col-6">
-                    <button class="mt-4 button">Войти</button>
-                  </div>
-                  <div class="col-6">
-                    <RouterLink to="/register">
-                      <button class="mt-4 button-register">Регистрация</button>
-                    </RouterLink>
-                  </div>
+            <div class="col-12 mt-3">
+              <label>
+                <p class="label">Пароль <span class="title">*</span></p>
+                <input
+                  v-model="password"
+                  type="text"
+                  placeholder="Введите пароль"
+                >
+              </label>
+            </div>
+            <RouterLink to="/profile">
+              <p class="mt-3">
+                <span class="go-profile">Перейти к профилю</span>
+              </p>
+            </RouterLink>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-12">
+                  <transition name="fade">
+                    <div v-if="isSuccess">
+                      <Alert
+                        text="Успешная авторизация!"
+                        type="success"
+                      />
+                    </div>
+                  </transition>
+                  <transition name="fade">
+                    <div v-if="isError">
+                      <Alert
+                        text="Неизвестная ошибка"
+                        type="danger"
+                      />
+                    </div>
+                  </transition>
+                </div>
+                <div class="col-6">
+                  <button class="mt-4 button">
+                    Войти
+                  </button>
+                </div>
+                <div class="col-6">
+                  <RouterLink to="/register">
+                    <button class="mt-4 button-register">
+                      Регистрация
+                    </button>
+                  </RouterLink>
                 </div>
               </div>
             </div>
           </div>
+        </div>
       </form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+// import axios from "axios";
+// import { storeToRefs } from "pinia";
 import { type Ref, ref } from "vue";
-import axios from "axios";
-import { setItem } from "@/utils/localStorage";
-import Alert from "@/components/ui/Alert.vue";
-import {api} from "../../../Constants";
 
+import Alert from "@/components/ui/Alert.vue";
+import { router } from "@/router";
+import { useAuthStore } from "@/stores/auth";
+
+// import { setItem } from "@/utils/localStorage";
+
+// import { api } from "../../Constants";
+
+const authStore = useAuthStore();
+
+const { authUser } = authStore;
 const login: Ref<string> = ref("");
 const password: Ref<string> = ref("");
 const isSuccess: Ref<boolean> = ref(false);
 const isError: Ref<boolean> = ref(false);
 
-function error() {
+// function error() {
+//   isSuccess.value = false;
+//   isError.value = true;
 
-  isSuccess.value = false;
-  isError.value = true;
+//   setInterval(() => {
+//     isError.value = false;
+//   }, 10000);
+// }
 
-  setInterval(() => {
-    isError.value = false;
-  }, 10000);
-}
+// function success() {
+//   isSuccess.value = true;
+//   isError.value = false;
 
-function success() {
+//   setInterval(() => {
+//     isSuccess.value = false;
+//   }, 10000);
+// }
 
-  isSuccess.value = true;
-  isError.value = false;
-
-
-  setInterval(() => {
-    isSuccess.value = false;
-  }, 10000);
-}
-
-
-async function auth(event: Event) {
-  event.preventDefault();
-
-  if (login.value == "" || password.value == "") {
-    error();
-  } else {
-    await axios.post(`${api}/auth/sign_in`, {
-      login: login.value,
-      password: password.value
-    }).then((resp) => {
-      success();
-      setItem("token", resp.data.token);
-    }).catch(() => {
-      error();
-    });
-    
-    login.value = "";
-    password.value = "";
-  }
+async function auth() {
+  const data = { login: login.value, password: password.value };
+  await authUser(data);
+  router.push({ name: "home" });
 }
 
 </script>
@@ -157,7 +169,6 @@ a {
   width: 200px;
 }
 
-
 .container-form {
   height: 700px;
   background: rgba(34, 34, 34, 0.518);
@@ -167,7 +178,6 @@ a {
   align-content: center;
   justify-content: center;
 }
-
 
 .title {
   color: red;

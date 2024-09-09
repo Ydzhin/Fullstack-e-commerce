@@ -1,8 +1,7 @@
-
 <template>
   <div class="wrapperApp">
     <div class="content">
-      <HeaderApp v-if="this.$route.name !== 'AuthPage' && this.$route.name !== 'RegisterPage'" />
+      <!-- <HeaderApp v-if="this.$route.name !== 'AuthPage' && this.$route.name !== 'RegisterPage'" /> -->
       <div class="container mt-4">
         <RouterView />
       </div>
@@ -10,8 +9,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HeaderApp from './components/Header/HeaderApp.vue';
+import { RouterLink, RouterView } from "vue-router";
+
+import HeaderApp from "./components/Header/HeaderApp.vue";
 </script>
 
 <style>
@@ -54,7 +54,6 @@ body {
   overflow-x: hidden;
   overflow: scroll;
 }
-
 
 .content::-webkit-scrollbar {
   display: none;
