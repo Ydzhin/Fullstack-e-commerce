@@ -1,3 +1,3 @@
-import NewsPages from "./ui/NewsPages.vue";
+import NewsPages from "./ui/NewsPage.vue";
 
 export default NewsPages;
