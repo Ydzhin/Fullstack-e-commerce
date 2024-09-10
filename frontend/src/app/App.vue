@@ -3,14 +3,15 @@
     <div class="content">
       <!-- <HeaderApp v-if="this.$route.name !== 'AuthPage' && this.$route.name !== 'RegisterPage'" /> -->
       <div class="container mt-4">
-        <RouterView />
+        <Suspense>
+          <auth-layer />
+        </Suspense>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { RouterView } from "vue-router";
-
+import { AuthLayer } from "@/shared/ui/auth";
 // import HeaderApp from "./components/Header/HeaderApp.vue";
 </script>
 
