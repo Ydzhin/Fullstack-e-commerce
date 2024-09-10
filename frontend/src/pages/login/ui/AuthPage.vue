@@ -79,17 +79,12 @@
 </template>
 
 <script setup lang="ts">
-// import axios from "axios";
-// import { storeToRefs } from "pinia";
+
 import { type Ref, ref } from "vue";
 
 import { router } from "@/app/providers";
+import { useAuthStore } from "@/app/providers/stores";
 import Alert from "@/components/ui/Alert.vue";
-import { useAuthStore } from "@/stores/auth";
-
-// import { setItem } from "@/utils/localStorage";
-
-// import { api } from "../../Constants";
 
 const authStore = useAuthStore();
 
