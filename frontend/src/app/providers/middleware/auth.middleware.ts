@@ -1,20 +1,6 @@
-// import { storeToRefs } from "pinia";
-
-// import { api } from "@/api";
-// import { auth0 } from "@/auth";
-// import { RouteNameEnum } from "@/common/enums/router-name.enum";
-// import { useAuthStore } from "@/modules/auth/store";
-// import { useVendorStore } from "@/modules/vendor/store";
-// import {
-//   vendorRedeemInviteHandler,
-//   vendorRemittanceEmailHandler,
-// } from "@/modules/vendor/utilities/vendor.utility";
-// import { decode } from "jwt-js-decode";
-
-// import { router } from "@/router";
 import { storeToRefs } from "pinia";
 
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/app/providers/stores";
 
 import type { RouteLocationNormalized } from "vue-router";
 
