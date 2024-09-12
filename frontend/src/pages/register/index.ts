@@ -1,3 +1,3 @@
-import RegisterPage from "@/components/User/RegisterPage.vue";
+import RegisterPage from "@/pages/register/ui/RegisterPage.vue";
 
 export default RegisterPage;

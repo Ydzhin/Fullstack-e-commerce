@@ -1,19 +1,27 @@
 <template>
-  <div class="d-flex justify-content-center mt-2">
+  <div class="flex justify-content-center mt-2">
     <div>
       <h2>Привет. Это простая авторизация на Vue3 + Express + MongoDB</h2>
       <div class="d-flex justify-content-center mt-2 gap-2 mt-4">
         <RouterLink to="/login">
-          <button class="button">Войти</button>
+          <button class="button">
+            Войти
+          </button>
         </RouterLink>
         <RouterLink to="/register">
-          <button class="button">Регистрация</button>
+          <button class="button">
+            Регистрация
+          </button>
         </RouterLink>
         <RouterLink to="/profile">
-          <button class="button">Профиль</button>
+          <button class="button">
+            Профиль
+          </button>
         </RouterLink>
         <RouterLink to="/news">
-          <button class="button">Новости</button>
+          <button class="button">
+            Новости
+          </button>
         </RouterLink>
       </div>
     </div>
