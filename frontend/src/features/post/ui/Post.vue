@@ -1,39 +1,120 @@
+<template>
+  <div class="post">
+    <div class="row">
+      <div class="col-1">
+        <img
+          src="https://i.pinimg.com/736x/17/fc/60/17fc600d9bfd9f4aff6bdd718e82df98.jpg"
+          alt="avatar"
+          class="avatar"
+        >
+      </div>a
+      <div class="col-xl-8 col-7 px-5 main-data">
+        <p class="login">
+          {{ props.login }}
+        </p>
+        <p class="date">
+          {{ getTimePost(props.createdAt) }}
+        </p>
+      </div>
+      <div class="col-3 d-flex align-items-center justify-content-end gap-3">
+        <Pen @click="isEdit = true" />
+        <Trash @click="deletePost(props.id)" />
+      </div>
+    </div>
+    <p
+      v-if="!isEdit"
+      class="text mt-3"
+    >
+      {{ props.description }}
+    </p>
+    <form
+      v-else
+      class="mt-3"
+      @submit="edit"
+    >
+      <input
+        v-model="textPost"
+        type="text"
+        :class="{
+          error: isError,
+        }"
+      >
+      <transition name="fade">
+        <p
+          v-if="isError"
+          class="feedback-error"
+        >
+          Слишком короткий пост!
+        </p>
+      </transition>
+      <div class="d-flex justify-content-end">
+        <button class="mt-2 button">
+          Редактировать
+        </button>
+      </div>
+    </form>
+  </div>
+</template>
 <script setup lang="ts">
 import axios from "axios";
-import { onMounted, type Ref, ref } from "vue";
+import dayjs from "dayjs";
+import { type PropType, ref, type Ref } from "vue";
 
-import PostPage from "@/components/Profile/Post/PostPage/PostPage.vue";
+import Heart from "@/components/icons/Heart.vue";
+import Pen from "@/components/icons/Pen.vue";
+import Trash from "@/components/icons/Trash.vue";
 
-import { api } from "../../../Constants";
+interface deleteFn {
+  (post_id: string): Promise<void>;
+}
 
-const text: Ref<string> = ref("");
-const isSuccess: Ref<boolean> = ref(false);
-const isError: Ref<boolean> = ref(false);
-const isBold: Ref<boolean> = ref(false);
+interface getPosts {
+  (): Promise<void>;
+}
 
 const props = defineProps({
-  id: {
+  login: {
     type: String,
     required: true,
   },
-  login: {
+  id: {
+    type: String,
+    required: true,
+    default: "",
+  },
+  description: {
+    type: String,
+    required: true,
+    default: "",
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+  },
+  deletePost: {
+    type: Function as PropType<deleteFn>,
+    required: true,
+  },
+  getPosts: {
+    type: Function as PropType<getPosts>,
+    required: true,
+  },
+  user_id: {
     type: String,
     required: true,
     default: "",
   },
 });
 
-interface posts {
-  _id: String;
-  text: String;
-  author_id: String;
-  createdAt: Date;
+const isEdit: Ref<boolean> = ref(false);
+const isError: Ref<boolean> = ref(false);
+const textPost: Ref<string> = ref(props.description);
+
+function getTimePost(time: Date) {
+  return dayjs(time).format("DD.MM.YYYY");
 }
 
-const posts = ref<posts[]>([]);
-
 function error() {
-  isSuccess.value = false;
   isError.value = true;
 
   setInterval(() => {
@@ -41,184 +122,132 @@ function error() {
   }, 10000);
 }
 
-function success() {
-  isError.value = false;
-  isSuccess.value = true;
-
-  setInterval(() => {
-    isSuccess.value = false;
-  }, 10000);
-}
-
-async function getPosts() {
-  await axios.get(`${api}/post/get_by_userId/${props.id}`).then((resp) => {
-    if (resp.data !== undefined) {
-      posts.value = resp.data;
-      console.log(posts.value);
-    } else {
-      return null;
-    }
-  }).catch((err) => {
-    console.log(err);
-  });
-}
-
-async function deletePost(post_id: string) {
-  await axios.delete(`${api}/post/delete/${post_id}`).then((resp) => {
-    console.log(resp.data);
-  }).catch((err) => {
-    console.log(err);
-  });
-
-  getPosts();
-}
-
-onMounted(() => {
-  getPosts();
-});
-
-async function createPost(event: Event) {
+async function edit(event: Event) {
   event.preventDefault();
 
-  if (text.value.length < 6) {
+  if (textPost.value.length < 6) {
     error();
+  } else if (textPost.value == props.description) {
+    isEdit.value = false;
   } else {
-    axios.post(`${api}/post/create`, {
-      userId: props.id,
-      description: text.value,
+    await axios.put(`${import.meta.env.VITE_APP_API}/post/edit/${props.id}`, {
+      description: textPost.value,
       title: "похуй",
     }).then(() => {
-      getPosts();
-      success();
-    }).catch((err) => {
-      console.log(err);
+      isEdit.value = false;
+      isError.value = false;
+      props.getPosts();
+    }).catch(() => {
       error();
     });
-
-    text.value = "";
   }
 }
 
 </script>
-
-<template>
-  <form @submit="createPost">
-    <textarea
-      v-model="text"
-      type="text"
-      placeholder="Расскажите о своем настроении"
-      :class="{
-        error: isError,
-        success: isSuccess,
-        bold: isBold,
-      }"
-    />
-    <transition name="fade">
-      <p
-        v-if="isError"
-        class="feedback-error"
-      >
-        Слишком короткий текст
-      </p>
-    </transition>
-    <div class="mt-2">
-      <transition name="fade">
-        <p
-          v-if="isSuccess"
-          class="feedback-success"
-        >
-          Успешно!
-        </p>
-      </transition>
-    </div>
-    <button class="button">
-      Опубликовать
-    </button>
-  </form>
-
-  <div class="mt-5 mb-5">
-    <div
-      v-for="(post, index) in posts"
-      :key="index"
-    >
-      <PostPage
-        :id="post.id.toString()"
-        :user_id="props.id"
-        :created-at="post.createdAt"
-        :description="post.description.toString()"
-        :login="props.login"
-        :delete-post="deletePost"
-        :get-posts="getPosts"
-      />
-    </div>
-  </div>
-</template>
-
 <style scoped>
-.feedback-error {
-  color: rgb(254, 55, 55);
-  font-weight: 300;
-}
-
-.feedback-success {
-  color: rgb(108, 252, 132);
-  font-weight: 300;
-}
-
-textarea {
-  width: 900px;
-  padding: 10px 0 0 15px;
-  outline: 1px solid #2a2a2a;
-  color: rgb(254, 254, 254);
-  height: 80px;
-  border-radius: 15px;
-  font-size: 18px;
-}
-
-textarea:focus {
-  transform: scale(1.02);
-  background: rgba(47, 47, 47, 0.46);
-  transition: transform 0.4s ease-in-out, background 0.4s ease-in-out;
-}
-
-.bold {
-  font-weight: bold;
-}
-
-textarea::placeholder {
-  color: rgb(213, 213, 213)
+.count-likes {
+  color: gray;
 }
 
 .error {
   outline: 1px solid rgb(254, 55, 55);
 }
 
-.success {
-  outline: 1px solid rgb(108, 252, 132);
+.feedback-error {
+  color: rgb(254, 55, 55);
+  font-weight: 300;
+}
+
+.red {
+  color: rgb(204, 36, 36);
+}
+
+.login,
+.date,
+.text {
+  color: aliceblue;
+  margin: 0;
+}
+
+.text {
+  font-size: 20px;
 }
 
 .button {
-  border: none;
   outline: 1px solid #2b2b2b;
-  height: 50px;
-  width: 200px;
+  padding: 8px;
+  width: 150px;
   border-radius: 10px;
-  background: none;
   color: aliceblue;
-  font-size: 19px;
 }
 
-.button:hover {
-  transform: scale(1.05);
-  transition: transform 0.5s;
+.date {
+  font-size: 16px;
+  color: #9c9c9c;
+}
+
+.login {
+  font-size: 28px;
+}
+
+.post {
+  padding: 25px;
+  outline: 1px solid #2a2a2a;
+  width: 900px;
+  background: rgba(43, 43, 43, 0.44);
+  border-radius: 15px;
+  margin-bottom: 55px;
+}
+
+.avatar {
+  border-radius: 50%;
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+}
+
+input {
+  width: 100%;
+  background: none;
+  padding: 10px 0 0 15px;
+  border: none;
+  outline: 1px solid #2a2a2a;
+  color: rgb(254, 254, 254);
+  height: 40px;
+  border-radius: 15px;
+  font-size: 17px;
+}
+
+input:focus {
+  transform: scale(1.02);
+  background: rgba(47, 47, 47, 0.46);
+  transition: transform 0.4s ease-in-out, background 0.4s ease-in-out;
 }
 
 @media screen and (max-width: 768px) {
-  textarea {
+  .post {
     width: 100%;
   }
-  .button {
-    width: 100%;
+
+  .login,
+  .date,
+  .text {
+    font-size: 17px;
+  }
+
+  .avatar {
+    height: 70px;
+    width: 70px;
+  }
+
+  .main-data {
+    margin-left: 20px;
+  }
+
+  .pen,
+  .trash {
+    width: 18px;
+    height: 18px
   }
 }
 </style>

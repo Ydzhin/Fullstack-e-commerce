@@ -8,7 +8,7 @@ export const route: RouteRecordRaw = {
   name: routeName,
   path: "/",
   meta: {
-    layout: LayoutEnum.common,
+    layout: LayoutEnum.secured,
   },
   component: () => import("@/pages/home"),
 };
