@@ -4,8 +4,6 @@ import { type Ref, ref, watchEffect } from "vue";
 
 import Alert from "@/components/ui/Alert.vue";
 
-import { api } from "../../Constants";
-
 const login: Ref<string> = ref("");
 const password: Ref<string> = ref("");
 const isSuccess: Ref<boolean> = ref(false);
@@ -38,10 +36,10 @@ function success() {
 async function register(event: Event) {
   event.preventDefault();
 
-  if (login.value == "" || password.value == "") {
+  if (login.value === "" || password.value === "") {
     error();
   } else {
-    await axios.post(`${api}/user/create`, {
+    await axios.post(`${import.meta.env.VITE_APP_API}/user/create`, {
       login: login.value,
       password: password.value,
     }).then(() => {

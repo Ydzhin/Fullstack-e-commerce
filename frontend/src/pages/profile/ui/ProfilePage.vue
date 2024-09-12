@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="post">
-          <Post
+          <post-list
             :id="id"
             :login="userData.login"
           />
@@ -53,7 +53,7 @@ import {
   onMounted, type Ref, ref, watchEffect,
 } from "vue";
 
-import Post from "@/components/Profile/Post/Post.vue";
+import { PostList } from "@/features/post";
 
 interface userData {
   _id?: string;

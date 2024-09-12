@@ -21,8 +21,7 @@ import axios from "axios";
 import { decode } from "jwt-js-decode";
 import { onMounted, ref, type Ref } from "vue";
 
-import News from "@/components/NewsPage/News/News.vue";
-import { api } from "@/Constants";
+import { News } from "@/features/news";
 
 interface IPostsData {
   _id?: string;
@@ -34,7 +33,7 @@ interface IPostsData {
 const postsData: Ref = ref<IPostsData[]>([]);
 
 async function getPosts() {
-  axios.get(`${api}/get_all_posts`).then((resp) => {
+  axios.get(`${import.meta.env.VITE_APP_API}/get_all_posts`).then((resp) => {
     postsData.value = resp.data;
   }).catch((err) => {
     console.log(err);
