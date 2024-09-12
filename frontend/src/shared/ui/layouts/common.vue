@@ -1,9 +1,10 @@
 <template>
   <div class="layout__default">
+    <!-- <TheHeader /> -->
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
-// console.log("vvv");
+import { TheHeader } from "@/shared/ui/headers";
 </script>
